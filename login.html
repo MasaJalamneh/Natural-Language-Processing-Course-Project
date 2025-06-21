@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon Beauty Products Login</title>
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <h1>Login Form</h1>
+      <img src="images/login.png" alt="Beauty Products" />
+      
+    </div>
+    <div class="right">
+      <!-- form -->
+      <form id="loginForm" class="loginForm">
+        <input id="customer_id" type="text" name="customer_id" placeholder="ID" required />
+        <input id="password" type="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+
+      <!-- error message -->
+      <p id="errorMessage" style="color: red;"></p>
+
+ 
+
+    </div>
+  </div>
+
+  <!-- load PapaParse before your script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      let users = [];
+
+      // load user data from CSV
+      fetch("user_profiles.csv")
+        .then(response => response.text())
+        .then(csvText => {
+          const parsed = Papa.parse(csvText, { header: true });
+          users = parsed.data;
+          console.log("Loaded users:", users);
+        });
+
+      // login form submit
+      const loginForm = document.getElementById("loginForm");
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const customer_id = document.getElementById("customer_id").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        const user = users.find(u => u.customer_id === customer_id && u.password === password);
+
+        if (user) {
+          // redirect with customer_id
+          window.location.href = `interface.html?customer_id=${customer_id}`;
+        } else {
+          document.getElementById("errorMessage").innerText = "Invalid user ID or password.";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

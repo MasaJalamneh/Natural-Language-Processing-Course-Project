@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Amazon Beauty Profile</title>
+  <link rel="stylesheet" href="user_profile.css" />
+</head>
+<body>
+  <div class="page">
+    <h1>
+      Amazon Beauty Products
+    </h1>
+
+    <div class="profile-box">
+      <h2>User Profile</h2>
+
+      <div class="field"><strong>User ID:</strong> <span id="customer_id"></span></div>
+      <div class="field"><strong>User total ratings:</strong> <span id="total_ratings"></span></div>
+      <div class="field"><strong>User average star rating:</strong> <span id="avg_star_rating"></span></div>
+      <div class="field"><strong>User helpful votes:</strong> <span id="avg_helpful_votes"></span></div>
+    </div>
+  </div>
+
+  <script>
+    // Function to parse query string params
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    // Simple CSV parser: converts CSV text to array of objects (assuming header in first row)
+    function parseCSV(csvText) {
+      const lines = csvText.trim().split('\n');
+      const headers = lines[0].split(',');  
+      const rows = lines.slice(1);
+
+      return rows.map(line => {
+        const values = line.split(',');
+        const obj = {};
+        headers.forEach((header, i) => {
+          obj[header] = values[i];
+        });
+        return obj;
+      });
+    }
+
+    async function loadUserProfile() {
+      const customer_id = getQueryParam('customer_id');
+      if (!customer_id) {
+        alert('No customer_id provided in URL.');
+        return;
+      }
+
+      try {
+        const response = await fetch('user_profiles.csv');
+        if (!response.ok) {
+          throw new Error('Failed to fetch user_profiles.csv');
+        }
+        const csvText = await response.text();
+        const users = parseCSV(csvText);
+
+        // find user by customer_id
+        const user = users.find(u => u.customer_id === customer_id);
+
+        if (!user) {
+          alert('User not found.');
+          return;
+        }
+
+        // populate the page fields
+        document.getElementById('customer_id').textContent = user.customer_id;
+        document.getElementById('total_ratings').textContent = user.total_ratings;
+        document.getElementById('avg_star_rating').textContent = user.avg_star_rating;
+        document.getElementById('avg_helpful_votes').textContent = user.avg_helpful_votes;
+
+      } catch (error) {
+        console.error(error);
+        alert('Error loading user profile.');
+      }
+    }
+
+    window.onload = loadUserProfile;
+  </script>
+</body>
+</html>

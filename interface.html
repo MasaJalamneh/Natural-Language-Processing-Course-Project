@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon Beauty Products</title>
+  <link rel="stylesheet" href="interface.css" />
+
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <div class="icon-placeholder">
+        <form class="logout-form" action="login.html" method="get">
+        <button type="submit">
+        <img src="images/logout.png" alt="Logout">
+        </button>
+        </form>
+      </div>
+      <div class="icon-placeholder">
+        <img src="images/list.png" alt="List">
+      </div>
+      <div class="icon-placeholder">
+      <form class="user-profile" action="user_profile.html" method="get">
+        <input type="hidden" name="customer_id" id="user-id-hidden">
+        <button type="submit">
+          <img src="images/user.png" alt="User">
+        </button>
+      </form>
+
+      </div>
+    </div>
+    <div class="search-bar">
+      <div class="icon-placeholder2">
+        <img src="images/search.png" alt="Search">
+      </div>
+    <input type="text" id="search-input" placeholder="Search...">
+    </div>
+    <div class="header-right">
+      <div class="icon-placeholder">
+        <img src="images/cam.png" alt="Camera">
+      </div>
+      <div class="icon-placeholder">
+        <img src="images/msg.png" alt="Message">
+      </div>
+      <div class="icon-placeholder">
+        <img src="images/cart.png" alt="Cart">
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-divider0"></div>
+  <div class="custom-divider"></div>
+  <div class="custom-divider2"></div>
+  <div class="custom-divider3"></div>
+  <div class="custom-divider4"></div> 
+
+  <div class="title-section">
+    <h1>Amazon</h1>
+    <h2>Beauty Products</h2>
+  </div>
+
+  <div class="custom-divider0"></div>
+  <div class="custom-divider"></div>
+  <div class="custom-divider2"></div>
+  <div class="custom-divider3"></div>
+  <div class="custom-divider4"></div>  
+
+
+  <div class="divider"></div>
+  <div class="filters">
+    <button class="active">All</button>
+    <button>Face</button>
+    <button class="active">Skin</button>
+    <button>Hair</button>
+  </div>
+
+  <div class="product-grid">
+    <img src="images/product9.jpg" alt="Product 1" onclick="window.location.href='product_details.html'" style="cursor: pointer;">
+    <img src="images/product15.jpg" alt="Product 2">
+    <img src="images/product10.jpg" alt="Product 3">
+    <img src="images/product12.jpg" alt="Product 4">
+    <img src="images/product13.jpg" alt="Product 5">
+    <img src="images/product17.jpg" alt="Product 6">
+    <img src="images/product11.jpg" alt="Product 7">
+    <img src="images/product20.jpg" alt="Product 8">
+    <img src="images/product18.jpg" alt="Product 9">
+    <img src="images/product19.jpg" alt="Product 10">
+    <img src="images/product8.jpg" alt="Product 11">
+    <img src="images/product21.jpg" alt="Product 12">
+    <img src="images/product22.jpg" alt="Product 13">
+    <img src="images/product23.jpg" alt="Product 14">
+    <img src="images/product24.jpg" alt="Product 15">
+    <img src="images/product25.jpg" alt="Product 16">
+
+  </div>
+
+  <div class="custom-divider0"></div>
+  <div class="custom-divider"></div>
+  <div class="custom-divider2"></div>
+  <div class="custom-divider3"></div>
+  <div class="custom-divider4"></div> 
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const customer_id = urlParams.get("customer_id");
+  const profileForm = document.querySelector(".user-profile");
+  const hiddenInput = document.getElementById("user-id-hidden");
+
+  if (customer_id && profileForm && hiddenInput) {
+    hiddenInput.value = customer_id;
+  }
+
+
+  // 2. attach customer_id to all dynamically created product links
+  function attachProductHandlers(products) {
+    const searchInput = document.querySelector(".search-bar input");
+    const productGrid = document.querySelector(".product-grid");
+
+    searchInput.addEventListener("input", function () {
+      const searchTerm = this.value.trim().toLowerCase();
+
+      const filteredProducts = products.filter(product => {
+        return product.product_title && product.product_title.toLowerCase().includes(searchTerm);
+      });
+
+      productGrid.innerHTML = "";
+
+      if (filteredProducts.length === 0) {
+        productGrid.innerHTML = "<p>No products found.</p>";
+      } else {
+        filteredProducts.forEach(product => {
+          const div = document.createElement("div");
+          div.className = "product-item";
+          div.innerHTML = `
+            <img src="${product.image}" alt="${product.product_title}" 
+                 style="cursor: pointer;" 
+                 onclick="window.location.href='product_details.html?productID=${encodeURIComponent(product.product_id)}&customer_id=${encodeURIComponent(customer_id)}'" />
+            <h3>${product.product_title}</h3>
+            <p>Price: ${product.price}</p>
+          `;
+          productGrid.appendChild(div);
+        });
+      }
+    });
+  }
+
+  function redirectToDetails(productID) {
+    window.location.href = `product_details.html?productID=${encodeURIComponent(productID)}&customer_id=${encodeURIComponent(customer_id)}`;
+  }
+
+  // 3. fetch product data and setup search filter
+  fetch('product.csv')
+    .then(response => response.text())
+    .then(data => {
+      const parsedData = Papa.parse(data, {
+        header: true,
+        skipEmptyLines: true,
+        dynamicTyping: true
+      });
+
+      const products = parsedData.data;
+      attachProductHandlers(products);
+    });
+
+
+  document.getElementById("search-input").addEventListener("input", function () {
+    const searchTerm = this.value.trim();
+
+    if (!searchTerm) return;
+
+    fetch('/search', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query: searchTerm })
+    })
+    .then(response => response.json())
+    .then(products => {
+      const productGrid = document.querySelector(".product-grid");
+      productGrid.innerHTML = "";
+
+      if (products.length === 0) {
+        productGrid.innerHTML = "<p>No products found.</p>";
+        return;
+      }
+
+      products.forEach(product => {
+        const div = document.createElement("div");
+        div.className = "product-item";
+        div.innerHTML = `
+          <img src="static/images/product9.jpg" alt="${product.product_title}" 
+               style="cursor: pointer;" 
+               onclick="window.location.href='product_details.html?productID=${encodeURIComponent(product.product_title)}&customer_id=${encodeURIComponent(customer_id)}'" />
+          <h3>${product.product_title}</h3>
+          <p>Score: ${product.combined_score.toFixed(2)}</p>
+        `;
+        productGrid.appendChild(div);
+      });
+    });
+  });
+</script>
+
+
+
+</body>
+</html>

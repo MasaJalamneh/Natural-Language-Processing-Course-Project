@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amazon Beauty Reviews</title>
+  <link rel="stylesheet" href="reviews.css" />
+</head>
+<body>
+  <div class="page">
+    <h1>
+            Amazon Beauty Products
+    </h1>
+    <div class="review-box">
+      <h2>Reviews</h2>
+
+      <div class="bar bar1"></div>
+      <div class="bar bar2"></div>
+      <div class="bar bar3"></div>
+      <div class="bar bar4"></div>
+      <div class="bar bar5"></div>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script>
+function loadReviews() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const productID = urlParams.get('productID');
+
+  if (!productID) {
+    console.error("Missing productID in URL");
+    return;
+  }
+
+  fetch(`http://127.0.0.1:5000/api/top_reviews?productID=${productID}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch reviews');
+      }
+      return response.json();
+    })
+    .then(data => {
+      for (let i = 0; i < 5; i++) {
+        const bar = document.querySelector(`.bar${i + 1}`);
+        const review = data[i];
+
+        if (review && bar) {
+          bar.innerHTML = `
+            <div class="review-text">${review.review}</div>
+          `;
+        } else if (bar) {
+          bar.innerHTML = `<div class="review-text">No review available</div>`;
+        }
+      }
+    })
+    .catch(error => {
+      console.error("Error loading reviews:", error);
+      for (let i = 0; i < 5; i++) {
+        const bar = document.querySelector(`.bar${i + 1}`);
+        if (bar) {
+          bar.innerHTML = `<div class="review-text">Error loading review.</div>`;
+        }
+      }
+    });
+}
+
+// cCall the function when the page loads
+window.addEventListener("DOMContentLoaded", loadReviews);
+</script>
+
+</body>
+</html>

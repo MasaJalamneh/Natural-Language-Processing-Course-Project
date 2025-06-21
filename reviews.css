@@ -1,0 +1,55 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Georgia', serif;
+}
+
+body {
+  background-color: #beb8dd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.page {
+  text-align: center;
+  width: 95%;
+}
+
+.page h1 {
+  color: white;
+  font-size: 3.5em;
+  margin-bottom: 80px;
+  margin-top: 170px;
+}
+
+.review-box {
+  background-color: white;
+  border-radius: 25px;
+  padding: 40px 20px;
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.review-box h2 {
+  color: #8e8aab;
+  font-size: 25px;
+  margin-bottom: 30px;
+}
+
+.bar {
+  background-color: #b0acd0;
+  border-radius: 25px;
+  margin: 15px 0;
+  padding: 15px;
+  color: white;
+  text-align: left;
+  width: 100%;
+  min-height: 80px; 
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+

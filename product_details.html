@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amazon Beauty Products</title>
+  <link rel="stylesheet" href="product_details.css" />
+</head>
+<body>
+
+  <h1>
+    Amazon Beauty Products
+  </h1>
+
+  <div class="container">
+    <div class="product-image">
+      <img id="product-image" src="" alt="Product Image" style="cursor: pointer;" />
+    </div>
+    <div class="content-placeholder">
+      <div class="bar" id="product-id">ID: </div>
+      <div class="bar" id="product-title">Title: </div>
+      <div class="bar" id="product-category">Category: </div>
+      <div class="bar" id="product-price">Price: </div>
+      <button class="review-button" id="review-button">
+        Reviews <span class="arrow">➤</span>
+      </button>
+      <div class="icon-placeholder">
+        <img src="images/cart.png" alt="Cart">
+      </div>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script>
+  async function loadProductDetails() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productID = urlParams.get('productID');
+    const customer_id = urlParams.get('customer_id');
+
+    if (!productID) {
+      alert("No productID provided in the URL.");
+      return;
+    }
+
+    const normalizedProductID = productID.trim().replace(/^"|"$/g, '');
+
+    try {
+      const [reviewsRes, productsRes] = await Promise.all([
+        fetch('Amazon_Reviews.csv'),
+        fetch('product.csv')
+      ]);
+
+      if (!reviewsRes.ok || !productsRes.ok) {
+        throw new Error("Failed to load one or both CSV files.");
+      }
+
+      const [reviewsText, productsText] = await Promise.all([
+        reviewsRes.text(),
+        productsRes.text()
+      ]);
+
+      // parse with PapaParse
+      const reviews = Papa.parse(reviewsText, {
+        header: true,
+        skipEmptyLines: true
+      }).data;
+
+      const products = Papa.parse(productsText, {
+        header: true,
+        skipEmptyLines: true
+      }).data;
+
+      const productReview = reviews.find(p => p.product_id.trim() === normalizedProductID);
+      const productData = products.find(p => p.product_id.trim() === normalizedProductID);
+
+      if (!productReview || !productData) {
+        alert("Product not found.");
+        return;
+      }
+
+      // display data
+      document.getElementById('product-id').textContent = productReview.product_id;
+      document.getElementById('product-title').textContent = productReview.product_title;
+      document.getElementById('product-category').textContent = `Category: ${productReview.product_category}`;
+      document.getElementById('product-price').textContent = `Price: ${productData.price}`;
+      document.getElementById('product-image').src = productData.image;
+
+      document.getElementById('review-button').onclick = () => {
+        window.location.href = `reviews.html?productID=${encodeURIComponent(productID)}&customer_id=${encodeURIComponent(customer_id)}`;
+      };
+
+    } catch (error) {
+      console.error(error);
+      alert("Error loading product details.");
+    }
+  }
+
+  window.onload = loadProductDetails;
+
+  document.getElementById('review-button').onclick = () => {
+    window.location.href = `reviews.html?productID=${encodeURIComponent(productID)}&customer_id=${encodeURIComponent(customer_id)}`;
+  };
+
+</script>
+
+
+</body>
+</html>

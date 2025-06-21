@@ -1,0 +1,130 @@
+body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Georgia', serif;
+      background-color: #beb8dd;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      color: #fff;
+    }
+
+    h1 {
+      margin-top: 50px;
+      font-size: 3.5em;
+      font-weight: bold;
+    }
+
+    .container {
+      
+      display: flex;
+      margin-top: 55px;
+      gap: 40px;
+      align-items: center;
+      margin-bottom: 70px;
+    }
+
+    .product-image img {
+        width: 500px;
+        height: 500px;
+        object-fit: contain; /* or use 'cover' depending on your need */
+        image-rendering: auto; /* Keeps quality on scaling */
+        display: block;
+        border-radius: 25px;
+    }
+
+
+    .content-placeholder {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .bar {
+      height: 75px;
+      background-color: white;
+      border-radius: 25px;
+      color: rgb(128, 97, 140);
+      font-family: 'Georgia', serif;
+      padding: 15px;
+      justify-content: center;
+      justify-items: center;
+    }
+
+    .bar:nth-child(1) {
+      width: 180px;
+      height: 40px;
+      
+    }
+
+    .bar:nth-child(2) {
+      width: 300px;
+    }
+
+    .bar:nth-child(3) {
+      width: 200px;
+    }
+
+    .bar:nth-child(4) {
+      width: 150px;
+      height: 40px;
+
+    }
+
+    .bar:nth-child(5) {
+      width: 350px;
+    }
+
+    .review-button {
+      margin-top: 5px;
+      width: fit-content;
+      padding: 8px 20px;
+      background-color: white;
+      border-radius: 20px;
+      color: #8b87a4;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease-in-out;
+    }
+    
+    .review_button.active {
+        background-color: #bcb8cc;
+        color: white;
+    }
+
+
+    .review-button:hover {
+    background-color: #cbc6e4;
+    color: #ffffff;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    }
+
+
+    .arrow {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .icon-placeholder img {
+      margin-left: 8px;
+      width: 53px;
+      height: 38px;
+      border-radius: 15px;
+    }
+
+    .icon-placeholder.active {
+        color: white;
+    }
+
+
+    .icon-placeholder:hover {
+    transform: scale(1.02);
+    }

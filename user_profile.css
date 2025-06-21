@@ -1,0 +1,50 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Georgia', serif;
+}
+
+body {
+  background-color: #beb8dd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.page {
+  text-align: center;
+  width: 90%;
+}
+
+.page h1 {
+ color: white;
+  font-size: 3.5em;
+  margin-bottom: 80px;
+}
+
+.profile-box {
+  background-color: white;
+  border-radius: 25px;
+  padding: 40px 40px;
+  width: 70%;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.profile-box h2 {
+  color: #bbb6e3;
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+
+.field {
+  background-color: #bab5da;
+  color: white;
+  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 999px;
+  text-align: left;
+  margin: 15px 0;
+}
