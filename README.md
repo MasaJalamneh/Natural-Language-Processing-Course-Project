@@ -12,7 +12,9 @@ This project focuses on enhancing the way we analyze and
 Evaluation & Conclusion
 Evaluation
  ✔ Successfully ranked real Amazon reviews
+
  ✔ Highlighted the most relevant and helpful feedback
+
  ✔ Detected usage patterns and sentiment effectively
 
 Conclusion
